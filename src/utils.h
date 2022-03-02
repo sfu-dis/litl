@@ -109,9 +109,11 @@ static inline uint64_t rdtsc(void) {
     return low | ((uint64_t)high) << 32;
 }
 
+/* ziyi: fix compile error
 static inline int gettid() {
     return syscall(SYS_gettid);
 }
+*/
 
 // EPFL libslock
 #define my_random xorshf96
