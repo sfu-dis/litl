@@ -62,7 +62,8 @@ $(SHS): src/liblock.in
 include/topology.h: include/topology.in
 	cat $< | sed -e "s/@nodes@/$$(numactl -H | head -1 | cut -f 2 -d' ')/g" > $@
 	sed -i "s/@cpus@/$$(nproc)/g" $@
-	sed -i "s/@cachelinesize@/128/g" $@  # 128 bytes is advised by intel documentation to avoid false-sharing with the HW prefetcher
+	# sed -i "s/@cachelinesize@/128/g" $@  # 128 bytes is advised by intel documentation to avoid false-sharing with the HW prefetcher
+	sed -i "s/@cachelinesize@/$$(getconf LEVEL1_DCACHE_LINESIZE)/g" $@
 	sed -i "s/@pagesize@/$$(getconf PAGESIZE)/g" $@
 	sed -i 's#@cpufreq@#'$$(cat /proc/cpuinfo | grep MHz | head -1 | awk '{ x = $$4/1000; printf("%0.2g", x); }')'#g' $@
 	chmod a+x $@
